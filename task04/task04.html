@@ -1,0 +1,160 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 04</title>
+  </head>
+  <style type="text/css">
+    html,body,ul,li{ padding: 0;margin: 0;}
+  	#panel{ 
+  			width:500px;
+  		    height:40px;
+  			overflow: hidden;
+  			margin: 10px;
+  	}
+  	#panel input{ 
+  			width: 160px;
+  			height: 25px;
+  			margin-right: 10px;
+  	}
+  	#panel button{
+  			display: inline-block; 
+  			width: 60px;
+  			height: 20px; 
+  			margin-right: 10px;
+  		}
+  	#quene{ 
+  			width:1000px;
+  			height: 80px;
+  			overflow: hidden;
+  			text-align: center;
+  			line-height: 3;
+  			color:white;
+  		}
+  	#quene .list{
+  			float: left;
+  			width: 50px;
+  			height: 50px;
+  			background: red;
+  			margin: 10px;
+  			list-style: none;
+  	}
+  </style>
+<body>
+	<div id="panel">
+		<input type="text" name="quene">
+		<button id="le">左侧入</button>
+		<button id="re">右侧入</button>
+		<button id="lo">左侧出</button>
+		<button id="ro">右侧出</button>
+	</div>
+	<ul id="quene">
+	</ul>
+<script type="text/javascript">
+
+function init()
+{
+	var quene = document.getElementById('quene');
+	leftEnter(quene);
+	rightEnter(quene);
+	leftOut(quene);
+	rightOut(quene);
+}
+
+init();
+remove();
+/*
+点击"左侧入"，将input中输入的数字从左侧插入队列中；
+ */
+function leftEnter(quene){
+
+	var le = document.getElementById('le');
+	le.onclick = function(){
+		var input = document.getElementsByTagName('input')[0];
+		if(checkInput(input.value)){
+			var Llist = document.createElement('li');
+			Llist.className = "list" ;
+			Llist.innerHTML = input.value;
+			quene.insertBefore(Llist,quene.firstChild);	
+			input.value = "";
+		}	
+	}
+}  
+
+/*
+点击"右侧入"，将input中输入的数字从右侧插入队列中；
+ */
+function rightEnter(quene){
+	
+	var re = document.getElementById('re');
+	re.onclick = function(){
+		var input = document.getElementsByTagName('input')[0];
+		if(checkInput(input.value)){
+			var Rlist = document.createElement('li');
+			Rlist.className = "list" ;
+			Rlist.innerHTML = input.value;
+			quene.appendChild(Rlist);
+			input.value = "";
+		}
+	}
+}
+
+// 判断输入值是否为数字
+function checkInput(data){
+	if(/\d/.test(data)){
+		return true;
+	}else{
+		alert("请输入正确的数字！");
+		return false;
+	}
+}
+
+/*
+点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+ */
+function leftOut(quene){
+	
+	var lo = document.getElementById('lo');	
+	lo.onclick = function(){
+		var first = quene.firstChild;
+		if(first){
+		 	alert(first.innerHTML);
+		 	quene.removeChild(first);
+		}else{
+		 	alert('当前没有数字可以删除！');
+		}	
+	}
+}
+/*
+点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+ */
+function rightOut(quene){
+
+	var ro = document.getElementById('ro');	
+	ro.onclick = function(){
+		var last = quene.lastChild;
+		if(last){
+			alert(last.innerHTML);
+			quene.removeChild(last);
+		}else{
+			alert('当前没有数字可以删除！');
+		}	
+	}
+}
+
+/*
+点击队列中任何一个元素，则该元素会被从队列中删除
+*/
+function remove(){
+
+	var qu = document.getElementById('quene');
+	var oList = qu.getElementsByTagName('li');
+	qu.onclick = function (e) {
+		e = e?e:window.e;
+		qu.removeChild(e.target);
+		e.stopPropagation();	
+	}
+}
+</script>
+</body>
+</html>

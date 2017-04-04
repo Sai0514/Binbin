@@ -1,0 +1,203 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 05</title>
+  </head>
+  <style type="text/css">
+    html,body,ul,li{ padding: 0;margin: 0;}
+  	#panel{ 
+  			width:1000px;
+  		    height:40px;
+  			margin: 10px;
+  			overflow: auto;
+  	}
+  	#panel input{ 
+  			width: 160px;
+  			height: 25px;
+  			margin-right: 10px;
+  	}
+  	#panel button{
+  			display: inline-block; 
+  			width: 60px;
+  			height: 20px; 
+  			margin-right: 10px;
+  	}
+  	#quene{ 
+  			width:auto;
+  			height: 200px;
+  			text-align: center;
+  			font-size: 9px;
+  			color:white;
+  			overflow: hidden;
+  	}
+  	#quene .list{
+  			display: inline-block;
+  			vertical-align: bottom;
+  			width: 20px;
+  			margin: 5px;
+  			padding:0;
+  			background: red;
+  			list-style: none;
+  	}
+  </style>
+<body>
+	<div id="panel">
+		<input type="text" name="quene">
+		<button id="le">左侧入</button>
+		<button id="re">右侧入</button>
+		<button id="lo">左侧出</button>
+		<button id="ro">右侧出</button>
+		<button id="sort">排  序</button>
+	</div>
+	<ul id="quene">
+	</ul>
+<script type="text/javascript">
+
+function init()
+{
+	var quene = document.getElementById('quene');
+	leftEnter(quene);
+	rightEnter(quene);
+	leftOut(quene);
+	rightOut(quene);
+}
+
+init();
+remove();
+queneSort();
+/*
+点击"左侧入"，将input中输入的数字从左侧插入队列中；
+ */
+function leftEnter(quene){
+
+	var le = document.getElementById('le');
+	le.onclick = function(){
+		var input = document.getElementsByTagName('input')[0];
+		if(checkInput(input.value) && checkCount(quene)){
+			var Llist = document.createElement('li');
+			Llist.className = "list" ;
+			Llist.innerHTML = input.value;
+			Llist.style.height = (input.value)*2+ "px";
+			// Llist.style.lineHeight = (input.value)*2+ "px";
+			quene.insertBefore(Llist,quene.firstChild);	
+			input.value = "";
+		}	
+	}
+}  
+
+/*
+点击"右侧入"，将input中输入的数字从右侧插入队列中；
+ */
+function rightEnter(quene){
+	
+	var re = document.getElementById('re');
+	re.onclick = function(){
+		var input = document.getElementsByTagName('input')[0];
+		if(checkInput(input.value) && checkCount(quene)){
+			var Rlist = document.createElement('li');
+			Rlist.className = "list" ;
+			Rlist.innerHTML = input.value;
+			Rlist.style.height = (input.value)*2 + "px";
+			//Rlist.style.lineHeight = (input.value)*2 + "px";
+			quene.appendChild(Rlist);
+			input.value = "";
+		}
+	}
+}
+
+// 判断输入值是否为数字
+function checkInput(data){
+	if(/\d/.test(data) && data >= 10 && data <= 100){
+		return true;
+	}else{
+		alert("请输入正确的数字！数字应该在10 ~ 100之间。");
+		return false;
+	}
+}
+//判断输入的个数不超过60个
+function checkCount(parent){
+	if(parent.childNodes.length>60){
+		alert("您输入的个数超过60个，禁止再输入!")
+		return false;
+	}else{
+		return true;
+	}
+}
+
+/*
+点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+ */
+function leftOut(quene){
+	
+	var lo = document.getElementById('lo');	
+	lo.onclick = function(){
+		var first = quene.firstChild;
+		if(first){
+		 	alert(first.innerHTML);
+		 	quene.removeChild(first);
+		}else{
+		 	alert('当前没有数字可以删除！');
+		}	
+	}
+}
+/*
+点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+ */
+function rightOut(quene){
+
+	var ro = document.getElementById('ro');	
+	ro.onclick = function(){
+		var last = quene.lastChild;
+		if(last){
+			alert(last.innerHTML);
+			quene.removeChild(last);
+		}else{
+			alert('当前没有数字可以删除！');
+		}	
+	}
+}
+
+/*
+点击队列中任何一个元素，则该元素会被从队列中删除
+*/
+function remove(){
+
+	var qu = document.getElementById('quene');
+	var oList = qu.getElementsByTagName('li');
+	qu.onclick = function (e) {
+		e = e?e:window.e;
+		qu.removeChild(e.target);
+		e.stopPropagation();	
+	}
+}
+
+/*
+点击排序按钮，对队列中的数字进行排序
+*/
+function queneSort(){
+	var sort = document.getElementById("sort");
+	var quene = document.getElementById("quene");
+	
+	sort.onclick = bubbleSort;
+
+	function bubbleSort(){
+		var nodes = quene.getElementsByTagName("li");
+		var len = nodes.length;
+		if(len == 0){return null;}
+		if(len == 1){return nodes;}
+		
+		for(var i=0;i<len;i++){
+			for(var j=0;j<len-i-1;j++){
+				if(parseInt(nodes[j].innerHTML)>parseInt(nodes[j+1].innerHTML)){
+					quene.insertBefore(nodes[j+1],nodes[j]);
+				}
+			}
+		}
+		return nodes;
+	}
+	
+}
+</script>
+</body>
+</html>

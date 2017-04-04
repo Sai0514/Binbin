@@ -1,0 +1,201 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 06</title>
+  </head>
+  <style type="text/css">
+    html,body,ul,li{ padding: 0;margin: 0;}
+  	#panel{ 
+  			width:1000px;
+  		    height:60px;
+  			margin: 10px;
+  			overflow: auto;
+  	}
+  	#panel input{ 
+  			width: 160px;
+  			height: 60px;
+  			margin-right: 10px;
+  	}
+  	#panel button{
+  			display: inline-block; 
+  			width: 60px;
+  			height: 20px; 
+  			margin-right: 10px;
+  	}
+  	#quene{ 
+  			width:auto;
+  			height: 200px;
+  			text-align: center;
+  			font-size: 9px;
+  			color:white;
+  			overflow: hidden;
+  	}
+  	#quene .list{
+  			display: inline-block;
+  			vertical-align: bottom;
+  			width: 30px;
+  			height: 50px;
+  			margin: 5px;
+  			padding:0;
+  			background-color: red;
+  			list-style: none;
+  	}
+  	#check{
+  			margin:10px;
+  	}
+  </style>
+<body>
+	<div id="panel">
+		<textarea name="quene" rows="3" cols="20"></textarea>  
+		<button id="le">左侧入</button>
+		<button id="re">右侧入</button>
+		<button id="lo">左侧出</button>
+		<button id="ro">右侧出</button>
+	</div>
+	<div id="check">
+		<input type="text" name="content">
+		<button id="check">查 找</button>
+	</div>
+	<ul id="quene">
+	</ul>
+<script type="text/javascript">
+
+function init()
+{
+	var quene = document.getElementById('quene');
+	leftEnter(quene);
+	rightEnter(quene);
+	leftOut(quene);
+	rightOut(quene);
+}
+
+init();
+remove();
+check();
+
+/*
+点击"左侧入"，将input中输入的数字从左侧插入队列中；
+ */
+function leftEnter(quene){
+
+	var le = document.getElementById('le');
+	le.onclick = function(){
+		var input = document.getElementsByTagName('textarea')[0];
+		// 对输入内容做分割处理
+		var arr = splitInput(input);
+		for(var i=0;i<arr.length;i++){
+			var Llist = document.createElement("li");
+			Llist.innerHTML = arr[i];
+			Llist.className = "list";
+			quene.appendChild(Llist);
+		}
+		input.value = "";
+	}
+}  
+
+/*
+点击"右侧入"，将input中输入的数字从右侧插入队列中；
+ */
+function rightEnter(quene){
+	
+	var re = document.getElementById('re');
+	re.onclick = function(){
+		var input = document.getElementsByTagName('textarea')[0];
+		// 对输入内容做分割处理
+		var arr = splitInput(input);
+		for(var i=0;i<arr.length;i++){
+			var Rlist = document.createElement("li");
+			Rlist.innerHTML = arr[i];
+			Rlist.className = "list";
+			quene.insertBefore(Rlist,quene.firstChild);
+		}
+		input.value = "";
+	}
+}
+
+/*
+对输入内容根据正则表达式，进行分割处理
+ */
+
+function splitInput(input) {
+	var arr0 = input.value.split(/[,\s\r\n\t、]/);
+	var res = arr0.filter(function(item,index,arr){
+		if(item!="undefined" && item!=null){
+			return item;
+		}
+	});
+	return res;
+}
+
+/*
+点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+ */
+function leftOut(quene){
+	
+	var lo = document.getElementById('lo');	
+	lo.onclick = function(){
+		var first = quene.firstChild;
+		if(first){
+		 	alert(first.innerHTML);
+		 	quene.removeChild(first);
+		}else{
+		 	alert('当前没有队列可以删除！');
+		}	
+	}
+}
+
+/*
+点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+ */
+function rightOut(quene){
+
+	var ro = document.getElementById('ro');	
+	ro.onclick = function(){
+		var last = quene.lastChild;
+		if(last){
+			alert(last.innerHTML);
+			quene.removeChild(last);
+		}else{
+			alert('当前没有队列可以删除');
+		}	
+	}
+}
+
+/*
+点击队列中任何一个元素，则该元素会被从队列中删除
+*/
+function remove(){
+
+	var qu = document.getElementById('quene');
+	var oList = qu.getElementsByTagName('li');
+	qu.onclick = function (e) {
+		e = e?e:window.e;
+		qu.removeChild(e.target);
+		e.stopPropagation();	
+	}
+}
+
+/*
+根据文本内容，模糊匹配查询
+*/
+function check(){
+	
+	var qu = document.getElementById("quene");
+	var ol = qu.getElementsByTagName("li");
+	var check = document.getElementById("check");
+	var match = document.getElementsByTagName("input")[0];
+
+	check.onclick = function(){	
+		for(var i=0;i<ol.length;i++){
+			if(match.value !== "" && ol[i].innerHTML.indexOf(match.value)!== -1){
+				ol[i].style.backgroundColor = "#000";
+			}
+		};
+		match.value = "";	
+	}
+
+}
+</script>
+</body>
+</html>

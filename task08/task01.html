@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Form Validation task01</title>
+	<style>
+	html, body,div{margin: 0;padding: 0;}
+	label{font-size: 24px;margin-right:10px; }
+	input{width: 500px;height: 50px;border: 1px solid #D3D3D3; border-radius: 5px;font-size: 24px; margin-right:10px;}
+	button{width: 100px; height: 50px;border:1px solid #1874bd; border-radius: 5px; font-size: 24px; color: #fff; background-color: rgba(24,116,189,0.7);}
+
+	#form{ margin: 20px; }
+	.requied{font-size: 20px; color:#D3D3D3;margin-left: 60px;}
+	.error{font-size: 20px; color:red;margin-left: 60px;}
+	.success{font-size: 20px; color:green;margin-left: 60px;}
+
+	</style>
+</head>
+<body>
+	<div id="form">
+		<div class="input">
+			<label for="user">名称</label>
+			<input type="text" id="user" required="">
+			<button id="btn">验证</button>
+			</div>	
+		<div class="info">
+			<span id="yaoqiu" class="requied">必填，长度为4～16个字符</span>
+		</div>
+	</div>
+	<script>
+		function $(id){
+			return document.getElementById(id);
+		}
+		function addEvent(elem,type,handler){
+			if(elem.addEventListener){
+				return elem.addEventListener(type,handler,false);
+			}else if(elem.attachEvent){
+				return elem.attachEvent("on"+type,handler);
+			}else{
+				return elem["on"+type] = handler;
+			}
+		}
+		
+		function validation(input,span){
+		 	var field = input.value;
+		 	if(!field){
+				span.innerHTML = "姓名不能为空";
+		 		span.className = "error";
+		 	}else if(check(field)){
+		 		span.innerHTML = "名称格式正确";
+		 		span.className = "success";
+		 	}else{
+		 		alert("名称格式不正确，请重新输入！");
+		 	}
+
+		 	function check(str){
+		 		var len = getStrLen(str);
+		 		if(len>4 && len<16){
+		 			return true;
+		 		}else{
+		 			return false;
+		 		}
+
+		 		function getStrLen(str){
+		 			var l = 0;
+		 			//console.log(str);
+		 			for(let c of str){
+		 				if( c.codePointAt(0)>0xFFFF){ //4个字节，则l＋2
+		 					l = l+2;
+		 				}else{ //2个字节，则l＋1
+		 					l = l+1;
+		 				}
+		 			}
+		 			return l;
+ 		 		}
+		 	}
+		}
+		
+
+		var input = $('user'),btn = $('btn'),span = $('yaoqiu');
+		addEvent(btn,'click',function(){validation(input,span);});
+		 
+	</script>
+</body>
+</html>
